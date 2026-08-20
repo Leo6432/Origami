@@ -63,7 +63,6 @@
   </a>
   <nav class="nav">
     <a href="#produit">La paire</a>
-    <a href="#details">Détails</a>
     <a href="#commander">Commander</a>
   </nav>
 </header>
@@ -99,8 +98,7 @@
   <!-- ================= BANDEAU ================= -->
   <ul class="strip">
     <li>Fait main</li>
-    <li>Moins de 2 g</li>
-    <li>Papier verni</li>
+    <li>Pliées à l'unité</li>
     <li>5 € la paire</li>
   </ul>
 
@@ -120,9 +118,9 @@
         <h3>Boucles d'oreilles « Grue »</h3>
         <p class="price-line"><span class="amount">5 €</span><span class="unit">la paire</span></p>
         <p>
-          Deux grues pliées dans du papier japonais, protégées d'un vernis mat, suspendues
-          à une petite chaîne cuivrée. Chaque pli est fait à la main : deux paires ne sont
-          jamais parfaitement identiques.
+          Deux grues en papier, pliées à la main, suspendues à une petite chaîne.
+          Chaque pli étant fait à la main, deux paires ne sont jamais parfaitement
+          identiques.
         </p>
         <p class="note">
           Le papier se choisit sur place, dans ce qui est disponible le jour même.
@@ -131,29 +129,6 @@
 
         <a class="btn btn-primary btn-wide" href="#commander">Commander cette paire — 5 €</a>
       </div>
-    </div>
-  </section>
-
-  <!-- ================= DETAILS ================= -->
-  <section id="details" class="section section-alt">
-    <h2 class="section-title">Détails</h2>
-    <div class="cards">
-      <article class="card">
-        <h3>Matières</h3>
-        <p>Papier origami japonais 70 g, vernis mat protecteur, chaînette et crochets en cuivre.</p>
-      </article>
-      <article class="card">
-        <h3>Dimensions</h3>
-        <p>Grue d'environ 2 cm d'envergure, 4,5 cm de longueur totale crochet compris.</p>
-      </article>
-      <article class="card">
-        <h3>Entretien</h3>
-        <p>Le papier n'aime ni la pluie ni la douche. On les retire avant, et elles durent des années.</p>
-      </article>
-      <article class="card">
-        <h3>Remise</h3>
-        <p>En main propre à l'accueil, dans une petite pochette. Pas de frais de port.</p>
-      </article>
     </div>
   </section>
 
@@ -189,6 +164,17 @@
           </label>
         </div>
 
+        <div class="promo">
+          <label class="field" for="promo">
+            <span>Code promo <small>(si vous en avez un)</small></span>
+          </label>
+          <div class="promo-row">
+            <input type="text" id="promo" name="promo" placeholder="Votre code" autocomplete="off" spellcheck="false">
+            <button type="button" class="btn btn-ghost" id="promoApply">Appliquer</button>
+          </div>
+          <p class="promo-msg" id="promoMsg" aria-live="polite"></p>
+        </div>
+
         <fieldset class="pay">
           <legend>Mode de paiement</legend>
           <label class="pay-option">
@@ -207,9 +193,15 @@
           </label>
         </fieldset>
 
-        <div class="total">
-          <span>Total</span>
-          <strong id="total">5 €</strong>
+        <div class="totals">
+          <div class="total-line" id="discountLine" hidden>
+            <span id="discountLabel">Code promo</span>
+            <span id="discountValue">−0 €</span>
+          </div>
+          <div class="total">
+            <span>Total</span>
+            <strong id="total">5 €</strong>
+          </div>
         </div>
 
         <button type="submit" class="btn btn-primary btn-wide">Valider la commande</button>

@@ -222,21 +222,6 @@ em { font-style: italic; }
   color: var(--ink-soft);
 }
 
-/* ============ Cartes détails ============ */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 18px;
-}
-.card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 24px;
-}
-.card h3 { font-size: 1.15rem; }
-.card p { margin: 0; color: var(--ink-soft); font-size: .96rem; }
-
 /* ============ Formulaire ============ */
 .order { max-width: 720px; }
 .order-form {
@@ -279,6 +264,22 @@ input.invalid { border-color: var(--accent); background: #fdf2f1; }
 .stepper button:hover { border-color: var(--accent); color: var(--accent); }
 .stepper input { text-align: center; }
 
+/* Code promo */
+.promo { margin-bottom: 20px; }
+.promo .field { gap: 0; margin-bottom: 7px; }
+.promo-row { display: flex; gap: 10px; }
+.promo-row input { text-transform: none; }
+.promo-row .btn { flex: none; padding: 11px 20px; }
+.promo-msg {
+  margin: 8px 0 0;
+  font-size: .87rem;
+  min-height: 1.2em;
+  color: var(--ink-soft);
+}
+.promo-msg.ok { color: #2f7a48; font-weight: 600; }
+.promo-msg.ko { color: var(--accent); }
+#promo.is-valid { border-color: #2f7a48; background: #f2f9f4; }
+
 /* Paiement */
 .pay { border: none; padding: 0; margin: 6px 0 20px; }
 .pay legend {
@@ -303,6 +304,19 @@ input.invalid { border-color: var(--accent); background: #fdf2f1; }
 .pay-option input { margin-top: 5px; accent-color: var(--accent); }
 .pay-body { display: flex; flex-direction: column; }
 .pay-body small { color: var(--ink-soft); }
+
+.total-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+  font-size: .95rem;
+  color: #2f7a48;
+  font-weight: 600;
+}
+.total-line + .total { padding-top: 8px; border-top: none; }
+.total del { color: var(--ink-soft); font-weight: 400; font-size: 1rem; margin-right: 10px; }
 
 .total {
   display: flex;

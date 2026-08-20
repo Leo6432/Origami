@@ -12,9 +12,9 @@ Pour le mettre en ligne, n'importe quel hébergement statique convient
 
 | Fichier      | Rôle                                                        |
 |--------------|-------------------------------------------------------------|
-| `index.html` | Le site : accueil, fiche produit, détails, formulaire        |
+| `index.html` | Le site : accueil, fiche produit, formulaire de commande     |
 | `style.css`  | Mise en page et couleurs                                     |
-| `script.js`  | Intro disco, quantité, total, message de confirmation        |
+| `script.js`  | Intro disco, quantité, code promo, total, confirmation       |
 
 ## Le paiement
 
@@ -25,6 +25,35 @@ Le formulaire ne prélève rien, il enregistre juste le choix du client :
 - **Carte bancaire** → message « paiement en ligne bientôt disponible »,
   la commande est mise de côté. À brancher plus tard sur un vrai
   prestataire (Stripe, SumUp, PayPal…).
+
+## Le code promo
+
+Un champ « Code promo » dans le formulaire. Le code actuel :
+
+| Code         | Effet |
+|--------------|-------|
+| `gregoire50` | −50 % sur le total |
+
+Le code n'est pas sensible aux majuscules ni aux espaces (`Gregoire 50`
+marche aussi). La remise apparaît sur une ligne à part au-dessus du total,
+l'ancien prix reste barré, et le code est repris dans le récapitulatif de
+commande.
+
+Pour ajouter ou changer un code, c'est une ligne dans `CODES_PROMO`
+en haut de `script.js` :
+
+```js
+var CODES_PROMO = {
+  "gregoire50": { remise: 0.5, libelle: "Code gregoire50" }
+};
+```
+
+`remise: 0.5` = −50 %, `0.2` = −20 %, etc.
+
+⚠️ Le code est écrit dans le fichier JavaScript, donc visible par
+quiconque regarde le code source de la page. C'est sans importance pour un
+code que vous donnez de la main à la main, mais ne comptez pas dessus pour
+garder un code secret.
 
 ## L'intro disco
 
@@ -43,7 +72,6 @@ qui tourne.
 - **Le prix** : `PRIX_UNITAIRE` en haut de `script.js`.
 - **La couleur du papier de la grue** : les variables `--paper-light`,
   `--paper-mid`, `--paper-shade`, `--paper-deep` en haut de `style.css`.
-- **Les textes** (matières, dimensions, entretien) : section « Détails ».
 - **La boucle d'oreille** : crochet, chaîne et grue sont dessinés ensemble
   dans un seul SVG (`<symbol id="earring">` en haut de `index.html`), donc
   la chaîne reste toujours accrochée à la grue. On peut le remplacer par

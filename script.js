@@ -48,9 +48,58 @@
     window.setTimeout(fermerIntro, motionReduite ? 600 : 3400);
   }
 
+  /* ============ Codes promo ============ */
+  /* Pour ajouter un code : une ligne ici. remise = part offerte (0.5 = -50 %). */
+  var CODES_PROMO = {
+    "gregoire50": { remise: 0.5, libelle: "Code gregoire50" }
+  };
+
+  var promoInput  = document.getElementById("promo");
+  var promoMsg    = document.getElementById("promoMsg");
+  var promoActif  = null; // { code, remise, libelle }
+
+  function chercherCode(saisie) {
+    var cle = saisie.trim().toLowerCase().replace(/\s+/g, "");
+    return CODES_PROMO[cle] ? { code: cle,
+                                remise: CODES_PROMO[cle].remise,
+                                libelle: CODES_PROMO[cle].libelle } : null;
+  }
+
+  function appliquerCode() {
+    var saisie = promoInput.value;
+
+    if (saisie.trim() === "") {
+      promoActif = null;
+      promoMsg.textContent = "";
+      promoMsg.className = "promo-msg";
+      promoInput.classList.remove("is-valid");
+    } else {
+      promoActif = chercherCode(saisie);
+      if (promoActif) {
+        promoMsg.textContent = "Code accepté : −" + Math.round(promoActif.remise * 100) + " % 🎉";
+        promoMsg.className = "promo-msg ok";
+        promoInput.classList.add("is-valid");
+      } else {
+        promoMsg.textContent = "Ce code n'existe pas.";
+        promoMsg.className = "promo-msg ko";
+        promoInput.classList.remove("is-valid");
+      }
+    }
+    majTotal();
+  }
+
+  promoInput.addEventListener("input", appliquerCode);
+  document.getElementById("promoApply").addEventListener("click", appliquerCode);
+  promoInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); appliquerCode(); }
+  });
+
   /* ============ Quantité et total ============ */
-  var qtyInput = document.getElementById("qty");
-  var totalEl  = document.getElementById("total");
+  var qtyInput      = document.getElementById("qty");
+  var totalEl       = document.getElementById("total");
+  var discountLine  = document.getElementById("discountLine");
+  var discountLabel = document.getElementById("discountLabel");
+  var discountValue = document.getElementById("discountValue");
 
   function quantite() {
     var n = parseInt(qtyInput.value, 10);
@@ -59,9 +108,31 @@
     return n;
   }
 
+  function euros(montant) {
+    return (Math.round(montant * 100) / 100)
+             .toFixed(montant % 1 === 0 ? 0 : 2)
+             .replace(".", ",") + " €";
+  }
+
+  function montants() {
+    var brut = quantite() * PRIX_UNITAIRE;
+    var remise = promoActif ? brut * promoActif.remise : 0;
+    return { brut: brut, remise: remise, net: brut - remise };
+  }
+
   function majTotal() {
     qtyInput.value = quantite();
-    totalEl.textContent = quantite() * PRIX_UNITAIRE + " €";
+    var m = montants();
+
+    if (promoActif) {
+      discountLine.hidden = false;
+      discountLabel.textContent = promoActif.libelle + " (−" + Math.round(promoActif.remise * 100) + " %)";
+      discountValue.textContent = "−" + euros(m.remise);
+      totalEl.innerHTML = "<del>" + euros(m.brut) + "</del>" + euros(m.net);
+    } else {
+      discountLine.hidden = true;
+      totalEl.textContent = euros(m.brut);
+    }
   }
 
   document.getElementById("minus").addEventListener("click", function () {
@@ -126,7 +197,7 @@
     }
 
     var n        = quantite();
-    var total    = n * PRIX_UNITAIRE;
+    var m        = montants();
     var envie    = document.getElementById("wish").value.trim();
     var paiement = form.querySelector('input[name="payment"]:checked').value;
     var numero   = numeroCommande();
@@ -136,7 +207,11 @@
     ligneRecap("Nom", nom.value.trim());
     ligneRecap("Quantité", n + (n > 1 ? " paires" : " paire"));
     if (envie) ligneRecap("Envie de couleur", envie);
-    ligneRecap("Total", total + " €");
+    if (promoActif) {
+      ligneRecap("Code promo", promoActif.code + " (−" + Math.round(promoActif.remise * 100) + " %)");
+      ligneRecap("Remise", "−" + euros(m.remise));
+    }
+    ligneRecap("Total", euros(m.net));
 
     if (paiement === "especes") {
       confirmIcon.classList.remove("pending");
@@ -145,7 +220,7 @@
       confirmMsg.innerHTML =
         "<strong>Rendez-vous à l'accueil pour payer.</strong><br>" +
         "Présentez le numéro de commande <strong>" + numero + "</strong> et réglez " +
-        "<strong>" + total + " €</strong> en espèces. Vous choisirez le papier sur place, " +
+        "<strong>" + euros(m.net) + "</strong> en espèces. Vous choisirez le papier sur place, " +
         "et vos boucles vous seront remises dans la foulée.";
     } else {
       confirmIcon.classList.add("pending");
@@ -153,6 +228,7 @@
       confirmTtl.textContent = "Commande notée — paiement par carte";
       confirmMsg.innerHTML =
         "Le paiement par carte bancaire <strong>arrive bientôt</strong>. " +
+        "Montant à régler : <strong>" + euros(m.net) + "</strong>. " +
         "Votre commande <strong>" + numero + "</strong> est mise de côté : on vous recontacte " +
         "dès que le paiement en ligne est ouvert. Vous pouvez aussi repasser en espèces à l'accueil.";
     }
@@ -165,7 +241,7 @@
 
   document.getElementById("again").addEventListener("click", function () {
     form.reset();
-    majTotal();
+    appliquerCode();
     document.querySelectorAll("input.invalid").forEach(function (i) {
       i.classList.remove("invalid");
     });
