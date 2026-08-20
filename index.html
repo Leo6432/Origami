@@ -83,19 +83,14 @@
       </div>
     </div>
 
-    <p class="price"><del id="priceOld" hidden></del><span id="price">5 €</span><span class="price-label">au total</span></p>
-
-    <div class="promo">
-      <input type="text" id="promo" placeholder="Code promo" autocomplete="off" spellcheck="false" aria-label="Code promo">
-      <span class="promo-msg" id="promoMsg" aria-live="polite"></span>
-    </div>
+    <p class="price"><span id="price">5 €</span><span class="price-label">au total</span></p>
 
     <div class="pay-buttons">
       <button type="button" class="btn btn-stripe" id="payStripe">
         Payer avec <b>Stripe</b>
       </button>
+      <button type="button" class="btn btn-cash" id="payCash">Payer en espèces à l'accueil</button>
       <button type="button" class="btn btn-transfer" id="payTransfer" hidden>Virement bancaire</button>
-      <button type="button" class="link" id="payCash">ou régler en espèces à l'accueil</button>
     </div>
   </section>
 
@@ -104,7 +99,6 @@
     <div class="sheet">
       <p class="sheet-brand" id="sheetBrand">Stripe</p>
       <p class="sheet-line"><span>Origami — boucles grue</span><b id="sheetQty">1 paire</b></p>
-      <p class="sheet-line sheet-promo" id="sheetPromo" hidden><span id="sheetPromoCode">Code</span><b id="sheetPromoValue">−0 €</b></p>
       <p class="sheet-total"><span>À payer</span><b id="sheetTotal">5 €</b></p>
       <p class="sheet-demo" id="sheetDemo">Démonstration : aucun paiement n'est réellement encaissé.</p>
       <button type="button" class="btn btn-stripe" id="sheetPay">Payer</button>

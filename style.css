@@ -171,43 +171,12 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
 }
-.price del {
-  font-family: "Inter", sans-serif;
-  font-size: .85rem;
-  font-weight: 400;
-  color: var(--ink-soft);
-}
 .price-label {
   font-family: "Inter", sans-serif;
   font-size: .78rem;
   font-weight: 400;
   color: var(--ink-soft);
 }
-
-/* ============ Code promo ============ */
-.promo { width: 100%; }
-.promo input {
-  width: 100%;
-  font: inherit;
-  font-size: .92rem;
-  padding: 9px 13px;
-  border: 1px dashed var(--line);
-  border-radius: 11px;
-  background: transparent;
-  color: var(--ink);
-  text-align: center;
-}
-.promo input::placeholder { color: #a89e93; }
-.promo input.ok { border-style: solid; border-color: #2f7a48; background: #f2f9f4; }
-.promo-msg {
-  display: block;
-  min-height: 1.1em;
-  margin-top: 3px;
-  font-size: .78rem;
-  color: var(--ink-soft);
-}
-.promo-msg.ok { color: #2f7a48; font-weight: 600; }
-.promo-msg.ko { color: var(--accent); }
 
 /* ============ Boutons ============ */
 .pay-buttons { width: 100%; display: flex; flex-direction: column; gap: 9px; }
@@ -235,6 +204,12 @@ body {
 .btn-stripe b { font-weight: 700; }
 .btn-card { background: var(--accent); color: #fff; }
 .btn-card:hover { opacity: .9; }
+.btn-cash {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn-cash:hover { border-color: var(--accent); color: var(--accent); }
 
 .link {
   border: none;
@@ -293,7 +268,6 @@ button:focus-visible, input:focus-visible {
   color: var(--ink);
 }
 .sheet-total b { font-family: "Fraunces", Georgia, serif; font-size: 1.45rem; }
-.sheet-promo, .sheet-promo b { color: #2f7a48; font-weight: 600; }
 .sheet-demo {
   margin: 2px 0 6px;
   font-size: .78rem;
@@ -460,24 +434,35 @@ button:focus-visible, input:focus-visible {
 
 /* ============ Écrans bas (téléphone en paysage) ============ */
 @media (max-height: 680px) {
+  .screen { padding: 8px 16px; }
+  .panel { gap: 5px; }
+  .head h1 { font-size: 1.7rem; }
+  .by { margin-top: 2px; font-size: .7rem; letter-spacing: .14em; }
+  .earring { height: clamp(56px, 15vh, 110px); }
+  .product { font-size: .92rem; }
+  .product span { display: none; }
+  .buy-row { padding: 5px 12px; }
+  .qty button { width: 28px; height: 28px; }
+  .price { font-size: 1.25rem; margin: 0; }
+  .pay-buttons { gap: 8px; }
+  .btn { padding: 11px 18px; font-size: .96rem; border-radius: 12px; }
+  .link { font-size: .85rem; padding: 2px; }
+  .sheet { padding: 18px 20px 14px; gap: 8px; }
+  .sheet-demo { padding: 7px 10px; font-size: .74rem; }
+  .done-mark { width: 52px; height: 52px; font-size: 1.5rem; }
+}
+
+@media (max-height: 560px) {
   .screen { padding: 6px 16px; }
   .panel { gap: 3px; }
-  .head h1 { font-size: 1.5rem; }
-  .by { margin-top: 1px; font-size: .64rem; letter-spacing: .12em; }
-  .earring { height: clamp(50px, 13vh, 100px); }
-  .product { font-size: .85rem; }
-  .product span { display: none; }
-  .buy-row { padding: 4px 10px; }
-  .qty button { width: 26px; height: 26px; }
-  .price { font-size: 1.1rem; margin: 0; }
-  .promo input { padding: 6px 12px; font-size: .85rem; }
-  .promo-msg { font-size: .72rem; }
-  .pay-buttons { gap: 6px; }
-  .btn { padding: 8px 16px; font-size: .9rem; border-radius: 11px; }
-  .link { font-size: .8rem; padding: 1px; }
-  .sheet { padding: 16px 18px 12px; gap: 7px; }
-  .sheet-demo { padding: 6px 9px; font-size: .72rem; }
-  .done-mark { width: 48px; height: 48px; font-size: 1.4rem; }
+  .head h1 { font-size: 1.4rem; }
+  .by { margin-top: 1px; font-size: .62rem; }
+  .earring { height: clamp(44px, 11vh, 80px); }
+  .buy-row { padding: 3px 10px; }
+  .qty button { width: 24px; height: 24px; }
+  .price { font-size: 1.05rem; }
+  .btn { padding: 8px 16px; font-size: .88rem; }
+  .link { font-size: .78rem; }
 }
 
 /* ============ Virement ============ */

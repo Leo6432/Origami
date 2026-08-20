@@ -45,11 +45,6 @@
     }
   };
 
-  /* Codes promo. remise : 0.5 = −50 %. */
-  var CODES_PROMO = {
-    "gregoire50": { remise: 0.5 }
-  };
-
   var LIEN_ACTIF    = /^https:\/\//.test(PAIEMENT.lien.trim());
   var VIREMENT_ACTIF = PAIEMENT.virement.iban.trim() !== "";
 
@@ -120,7 +115,6 @@
 
   /* ============ Prix (libre, fixé par le client) ============ */
   var qte = 1;
-  var promoActif = null;
   var unitPriceInput = $("unitPrice");
 
   function euros(m) {
@@ -134,17 +128,14 @@
   }
 
   function montants() {
-    var brut = qte * prixUnitaire();
-    var remise = promoActif ? brut * promoActif.remise : 0;
-    return { brut: brut, remise: remise, net: brut - remise };
+    var net = qte * prixUnitaire();
+    return { net: net };
   }
 
   function majPrix() {
     var m = montants();
     $("qtyValue").textContent = qte;
     $("price").textContent = euros(m.net);
-    $("priceOld").textContent = euros(m.brut);
-    $("priceOld").hidden = !promoActif;
   }
 
   $("minus").addEventListener("click", function () {
@@ -163,32 +154,6 @@
     majPrix();
   });
 
-  /* ============ Code promo ============ */
-  var promoInput = $("promo");
-  var promoMsg   = $("promoMsg");
-
-  promoInput.addEventListener("input", function () {
-    var cle = promoInput.value.trim().toLowerCase().replace(/\s+/g, "");
-
-    if (cle === "") {
-      promoActif = null;
-      promoMsg.textContent = "";
-      promoMsg.className = "promo-msg";
-      promoInput.classList.remove("ok");
-    } else if (CODES_PROMO[cle]) {
-      promoActif = { code: cle, remise: CODES_PROMO[cle].remise };
-      promoMsg.textContent = "Code accepté : −" + Math.round(promoActif.remise * 100) + " % 🎉";
-      promoMsg.className = "promo-msg ok";
-      promoInput.classList.add("ok");
-    } else {
-      promoActif = null;
-      promoMsg.textContent = "Ce code n'existe pas.";
-      promoMsg.className = "promo-msg ko";
-      promoInput.classList.remove("ok");
-    }
-    majPrix();
-  });
-
   majPrix();
 
   /* ============ Paiement ============ */
@@ -202,15 +167,6 @@
 
   function ouvrirFeuille() {
     var m = montants();
-
-    if (promoActif) {
-      $("sheetPromo").hidden = false;
-      $("sheetPromoCode").textContent = "Code " + promoActif.code;
-      $("sheetPromoValue").textContent = "−" + euros(m.remise);
-    } else {
-      $("sheetPromo").hidden = true;
-    }
-
     $("sheetQty").textContent = qte + (qte > 1 ? " paires" : " paire");
     $("sheetTotal").textContent = euros(m.net);
     if (LIEN_ACTIF) {
@@ -321,11 +277,6 @@
   $("restart").addEventListener("click", function () {
     qte = 1;
     unitPriceInput.value = PRIX_SUGGERE;
-    promoActif = null;
-    promoInput.value = "";
-    promoMsg.textContent = "";
-    promoMsg.className = "promo-msg";
-    promoInput.classList.remove("ok");
     majPrix();
     montrer("shop");
   });
