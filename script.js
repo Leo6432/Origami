@@ -23,17 +23,16 @@
           Exemple : "https://buy.stripe.com/xxxxxxxx"            */
     lien: "https://buy.stripe.com/test_00w8wP2vD7BD84XeTWds400",
 
-    /* 2. Nom du paramètre d'URL utilisé pour pré-remplir le
-          montant sur la page Stripe. Le prix par paire × la
-          quantité (remise éventuelle déduite) est calculé ici,
-          converti en centimes, et transmis via ce paramètre —
-          Stripe l'appelle "prefilled_price". À VÉRIFIER en mode
-          Test avant de passer en Production : ouvrez le lien
-          test avec `?prefilled_price=1000` et confirmez que
-          10,00 € apparaît bien pré-rempli. Si votre prestataire
-          n'a pas cette option, mettez "" : le client tapera son
-          montant lui-même sur la page de paiement.              */
-    parametreMontant: "prefilled_price",
+    /* 2. Nom du paramètre d'URL pour pré-remplir le montant sur
+          la page Stripe. VÉRIFIÉ le 20/08 : ce lien Stripe ignore
+          "prefilled_price" et demande au client de taper son
+          montant lui-même — ce qui reste cohérent avec un prix
+          libre. Laissé à "" pour ne pas envoyer un paramètre
+          inutile. Repassez-le à "prefilled_price" seulement si
+          vous recréez un lien et que le test ci-dessus marche :
+          ouvrez `votre_lien?prefilled_price=1000` et vérifiez
+          que 10,00 € apparaît pré-rempli avant de vous y fier.  */
+    parametreMontant: "",
 
     /* 3. Virement bancaire (facultatif). Renseigné = un bouton
           « Virement » apparaît et affiche ces informations.
@@ -193,7 +192,7 @@
   majPrix();
 
   /* ============ Paiement ============ */
-  if (LIEN_ACTIF) $("sheetDemo").hidden = true;
+  /* Message affiché au-dessus du bouton, selon le cas. */
   var moyen = "apple"; // "apple" ou "carte"
 
   function reference() {
@@ -220,7 +219,16 @@
 
     $("sheetQty").textContent = qte + (qte > 1 ? " paires" : " paire");
     $("sheetTotal").textContent = euros(m.net);
-    $("sheetPay").textContent = "Payer " + euros(m.net);
+    if (LIEN_ACTIF) {
+      $("sheetDemo").hidden = false;
+      $("sheetDemo").textContent =
+        "Sur la page suivante, indiquez ce montant : " + euros(m.net) + ".";
+      $("sheetPay").textContent = "Continuer vers le paiement";
+    } else {
+      $("sheetDemo").hidden = false;
+      $("sheetDemo").textContent = "Démonstration : aucun paiement n'est réellement encaissé.";
+      $("sheetPay").textContent = "Payer " + euros(m.net);
+    }
     $("sheetPay").className = "btn " + (type === "apple" ? "btn-apple" : "btn-card");
     montrer("sheet");
   }
@@ -237,8 +245,14 @@
     window.location.href = url;
   }
 
+  /* Le lien accepte-t-il un montant pré-rempli ? Si oui, la page
+     Stripe affichera déjà le bon total et on peut y envoyer le
+     client directement. Sinon, on lui montre d'abord le montant
+     à taper lui-même, pour qu'il ne parte pas les mains vides. */
+  var MONTANT_TRANSMIS = LIEN_ACTIF && !!PAIEMENT.parametreMontant;
+
   function demarrerPaiement(type) {
-    if (LIEN_ACTIF) { allerAuPaiement(); return; }
+    if (MONTANT_TRANSMIS) { allerAuPaiement(); return; }
     ouvrirFeuille(type);
   }
 
@@ -247,6 +261,8 @@
   $("sheetBack").addEventListener("click", function () { montrer("shop"); });
 
   $("sheetPay").addEventListener("click", function () {
+    if (LIEN_ACTIF) { allerAuPaiement(); return; }
+
     var bouton = $("sheetPay");
     bouton.classList.add("is-loading");
     bouton.textContent = "Paiement…";

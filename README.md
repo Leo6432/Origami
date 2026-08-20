@@ -74,17 +74,20 @@ mode **« Le client choisit le prix »**, pas un prix fixe.
    ```js
    var PAIEMENT = {
      lien: "https://buy.stripe.com/ton_lien",
-     parametreMontant: "prefilled_price",
+     parametreMontant: "",   // voir ci-dessous
    ```
 
-Le site calcule lui-même le total (prix par paire × quantité, remise
-éventuelle déduite) et l'envoie pré-rempli sur la page Stripe via ce
-paramètre. **À vérifier avant de passer en Production** : ouvre ton lien
-de test en ajoutant `?prefilled_price=1000` à la fin de l'adresse dans un
-navigateur, et confirme que **10,00 €** apparaît bien pré-rempli sur la
-page. Si ce n'est pas le cas (Stripe fait parfois évoluer cette fonction),
-laisse `parametreMontant: ""` : le client tapera son montant lui-même sur
-la page Stripe, ce qui reste tout à fait utilisable.
+Le site calcule le total lui-même (prix par paire × quantité, remise
+éventuelle déduite) et peut le transmettre en pré-remplissage sur la page
+Stripe. **Vérifié le 20/08 sur ce lien : Stripe ignore ce pré-remplissage et
+demande au client de taper son montant lui-même** — `parametreMontant` est
+donc laissé à `""`. Dans ce cas, le site n'envoie plus le client
+directement sur Stripe : il lui montre d'abord un écran récapitulatif avec
+le montant exact à indiquer, avant qu'il clique sur « Continuer vers le
+paiement ». Si vous recréez un lien et voulez retester le pré-remplissage :
+ouvrez `votre_lien?prefilled_price=1000` dans un navigateur et vérifiez que
+10,00 € apparaît déjà rempli avant de remettre `parametreMontant:
+"prefilled_price"`.
 
 Apple Pay et Google Pay apparaissent tout seuls sur les appareils
 compatibles — rien à configurer, tant que le site est servi en HTTPS.
