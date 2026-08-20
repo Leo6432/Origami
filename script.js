@@ -3,10 +3,45 @@
 
   var PRIX_UNITAIRE = 5; // euros la paire
 
+  /* ==========================================================
+     PAIEMENT — à remplir par Colin. Voir le README, section
+     « Encaisser pour de vrai ». Tant que tout est vide, le site
+     reste en démonstration (aucun argent n'est encaissé).
+     N'écrivez ici QUE des informations publiques : un lien de
+     paiement, une clé « publishable » (pk_live_…), un IBAN que
+     vous acceptez d'afficher. JAMAIS une clé secrète (sk_…).
+     ========================================================== */
+  var PAIEMENT = {
+
+    /* 1. Lien de paiement (Stripe Payment Link, SumUp, PayPal.me,
+          Lydia, Revolut…). Dès qu'il est rempli, les boutons
+          Apple Pay / carte envoient le client dessus.
+          Exemple : "https://buy.stripe.com/xxxxxxxx"            */
+    lien: "",
+
+    /* 2. Le lien accepte-t-il une quantité dans l'adresse ?
+          Stripe Payment Link : laissez "quantity" (activez
+          « quantité modifiable » côté Stripe). Sinon : ""       */
+    parametreQuantite: "quantity",
+
+    /* 3. Virement bancaire (facultatif). Renseigné = un bouton
+          « Virement » apparaît et affiche ces informations.
+          Un IBAN affiché sur un site public ne permet que de
+          RECEVOIR de l'argent, mais il devient lisible par tous. */
+    virement: {
+      iban: "",
+      beneficiaire: "",
+      banque: ""
+    }
+  };
+
   /* Codes promo. remise : 0.5 = −50 %. */
   var CODES_PROMO = {
     "gregoire50": { remise: 0.5 }
   };
+
+  var LIEN_ACTIF    = /^https:\/\//.test(PAIEMENT.lien.trim());
+  var VIREMENT_ACTIF = PAIEMENT.virement.iban.trim() !== "";
 
   var motionReduite = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var COULEURS_FETE = ["#ff5f7e", "#ffd166", "#5ec8ff", "#b98cff", "#6ee7a8", "#ff8f5e"];
@@ -56,7 +91,12 @@
   }
 
   /* ============ Panneaux (un seul visible à la fois) ============ */
-  var panneaux = { shop: $("panelShop"), sheet: $("panelSheet"), done: $("panelDone") };
+  var panneaux = {
+    shop:  $("panelShop"),
+    sheet: $("panelSheet"),
+    iban:  $("panelIban"),
+    done:  $("panelDone")
+  };
 
   function montrer(nom) {
     Object.keys(panneaux).forEach(function (cle) {
@@ -126,6 +166,7 @@
   majPrix();
 
   /* ============ Paiement ============ */
+  if (LIEN_ACTIF) $("sheetDemo").hidden = true;
   var moyen = "apple"; // "apple" ou "carte"
 
   function reference() {
@@ -157,8 +198,23 @@
     montrer("sheet");
   }
 
-  $("payApple").addEventListener("click", function () { ouvrirFeuille("apple"); });
-  $("payCard").addEventListener("click", function () { ouvrirFeuille("carte"); });
+  /* Envoie le client vers le vrai prestataire de paiement. */
+  function allerAuPaiement() {
+    var url = PAIEMENT.lien.trim();
+    if (PAIEMENT.parametreQuantite && qte > 1) {
+      url += (url.indexOf("?") === -1 ? "?" : "&") +
+             encodeURIComponent(PAIEMENT.parametreQuantite) + "=" + qte;
+    }
+    window.location.href = url;
+  }
+
+  function demarrerPaiement(type) {
+    if (LIEN_ACTIF) { allerAuPaiement(); return; }
+    ouvrirFeuille(type);
+  }
+
+  $("payApple").addEventListener("click", function () { demarrerPaiement("apple"); });
+  $("payCard").addEventListener("click", function () { demarrerPaiement("carte"); });
   $("sheetBack").addEventListener("click", function () { montrer("shop"); });
 
   $("sheetPay").addEventListener("click", function () {
@@ -181,6 +237,35 @@
       fete();
     }, 1100);
   });
+
+  /* ============ Virement bancaire ============ */
+  if (VIREMENT_ACTIF) {
+    $("payTransfer").hidden = false;
+    $("ibanValue").textContent = PAIEMENT.virement.iban;
+    $("ibanHolder").textContent = PAIEMENT.virement.beneficiaire || "—";
+    $("ibanBank").textContent = PAIEMENT.virement.banque || "—";
+    $("ibanBankRow").hidden = !PAIEMENT.virement.banque;
+
+    $("payTransfer").addEventListener("click", function () {
+      var m = montants();
+      $("ibanAmount").textContent = euros(m.net);
+      $("ibanRef").textContent = reference();
+      montrer("iban");
+    });
+
+    $("ibanCopy").addEventListener("click", function () {
+      var texte = PAIEMENT.virement.iban.replace(/\s+/g, "");
+      var fini = function () {
+        $("ibanCopy").textContent = "IBAN copié ✓";
+        window.setTimeout(function () { $("ibanCopy").textContent = "Copier l'IBAN"; }, 2000);
+      };
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(texte).then(fini, function () {});
+      }
+    });
+
+    $("ibanBack").addEventListener("click", function () { montrer("shop"); });
+  }
 
   /* ============ Espèces ============ */
   $("payCash").addEventListener("click", function () {

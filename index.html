@@ -88,6 +88,7 @@
         Payer avec <b>Apple&nbsp;Pay</b>
       </button>
       <button type="button" class="btn btn-card" id="payCard">Carte bancaire</button>
+      <button type="button" class="btn btn-transfer" id="payTransfer" hidden>Virement bancaire</button>
       <button type="button" class="link" id="payCash">ou régler en espèces à l'accueil</button>
     </div>
   </section>
@@ -99,9 +100,25 @@
       <p class="sheet-line"><span>Origami — boucles grue</span><b id="sheetQty">1 paire</b></p>
       <p class="sheet-line sheet-promo" id="sheetPromo" hidden><span id="sheetPromoCode">Code</span><b id="sheetPromoValue">−0 €</b></p>
       <p class="sheet-total"><span>À payer</span><b id="sheetTotal">5 €</b></p>
-      <p class="sheet-demo">Démonstration : aucun paiement n'est réellement encaissé.</p>
+      <p class="sheet-demo" id="sheetDemo">Démonstration : aucun paiement n'est réellement encaissé.</p>
       <button type="button" class="btn btn-apple" id="sheetPay">Payer</button>
       <button type="button" class="link" id="sheetBack">Annuler</button>
+    </div>
+  </section>
+
+  <!-- ===== Écran virement ===== -->
+  <section class="panel" id="panelIban" hidden>
+    <div class="sheet">
+      <p class="sheet-brand">Virement bancaire</p>
+      <p class="sheet-line"><span>Montant</span><b id="ibanAmount">5 €</b></p>
+      <p class="sheet-line"><span>Référence à indiquer</span><b id="ibanRef">GR-0000</b></p>
+      <dl class="iban">
+        <dt>Bénéficiaire</dt><dd id="ibanHolder">—</dd>
+        <dt>IBAN</dt><dd class="iban-number" id="ibanValue">—</dd>
+        <div id="ibanBankRow" hidden><dt>Banque</dt><dd id="ibanBank">—</dd></div>
+      </dl>
+      <button type="button" class="btn btn-card" id="ibanCopy">Copier l'IBAN</button>
+      <button type="button" class="link" id="ibanBack">Retour</button>
     </div>
   </section>
 
