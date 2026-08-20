@@ -193,7 +193,6 @@
 
   /* ============ Paiement ============ */
   /* Message affiché au-dessus du bouton, selon le cas. */
-  var moyen = "apple"; // "apple" ou "carte"
 
   function reference() {
     var d = new Date();
@@ -201,13 +200,8 @@
     return "GR-" + jour + "-" + String(Math.floor(Math.random() * 9000) + 1000);
   }
 
-  var LOGO_APPLE = '<svg viewBox="0 0 24 24" class="apple" aria-hidden="true">' +
-    '<path fill="currentColor" d="M16.2 12.6c0-2.2 1.8-3.3 1.9-3.3-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.6.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.3zM14 6.2c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1.1 1.7-.9 2.6 1 .1 2-.5 2.6-1.2z"/></svg>';
-
-  function ouvrirFeuille(type) {
-    moyen = type;
+  function ouvrirFeuille() {
     var m = montants();
-    $("sheetBrand").innerHTML = (type === "apple") ? LOGO_APPLE + "<span>Pay</span>" : "Carte bancaire";
 
     if (promoActif) {
       $("sheetPromo").hidden = false;
@@ -229,7 +223,7 @@
       $("sheetDemo").textContent = "Démonstration : aucun paiement n'est réellement encaissé.";
       $("sheetPay").textContent = "Payer " + euros(m.net);
     }
-    $("sheetPay").className = "btn " + (type === "apple" ? "btn-apple" : "btn-card");
+    $("sheetPay").className = "btn btn-stripe";
     montrer("sheet");
   }
 
@@ -251,13 +245,12 @@
      à taper lui-même, pour qu'il ne parte pas les mains vides. */
   var MONTANT_TRANSMIS = LIEN_ACTIF && !!PAIEMENT.parametreMontant;
 
-  function demarrerPaiement(type) {
+  function demarrerPaiement() {
     if (MONTANT_TRANSMIS) { allerAuPaiement(); return; }
-    ouvrirFeuille(type);
+    ouvrirFeuille();
   }
 
-  $("payApple").addEventListener("click", function () { demarrerPaiement("apple"); });
-  $("payCard").addEventListener("click", function () { demarrerPaiement("carte"); });
+  $("payStripe").addEventListener("click", demarrerPaiement);
   $("sheetBack").addEventListener("click", function () { montrer("shop"); });
 
   $("sheetPay").addEventListener("click", function () {
@@ -274,8 +267,7 @@
       $("doneMark").textContent = "✓";
       $("doneTitle").textContent = "Merci !";
       $("doneMsg").innerHTML =
-        "Paiement de <b>" + euros(m.net) + "</b> par " +
-        (moyen === "apple" ? "Apple Pay" : "carte bancaire") + " — <b>simulé</b>, " +
+        "Paiement de <b>" + euros(m.net) + "</b> par Stripe — <b>simulé</b>, " +
         "rien n'a été débité. Vos boucles vous attendent auprès de Colin.";
       $("doneRef").textContent = reference();
       montrer("done");

@@ -109,18 +109,30 @@ body {
 /* ============ Quantité + prix ============ */
 .buy {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
+  flex-direction: column;
   width: 100%;
-  padding: 8px 6px 8px 8px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: #fff;
+  overflow: hidden;
 }
+.buy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 9px 14px;
+}
+.buy-row + .buy-row { border-top: 1px solid var(--line); }
+.buy-label {
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 .qty { display: flex; align-items: center; gap: 10px; }
 .qty button {
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   border-radius: 9px;
   border: 1px solid var(--line);
   background: var(--bg);
@@ -129,17 +141,11 @@ body {
   cursor: pointer;
 }
 .qty button:hover { border-color: var(--accent); color: var(--accent); }
-.qty span { min-width: 1.2em; font-weight: 600; }
+.qty span { min-width: 1.2em; text-align: center; font-weight: 600; }
 
-.unit-price {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding-left: 10px;
-  border-left: 1px solid var(--line);
-}
+.unit-price { display: flex; align-items: center; gap: 6px; }
 .unit-price input {
-  width: 3.2em;
+  width: 3.4em;
   font: inherit;
   font-weight: 600;
   font-size: 1rem;
@@ -153,7 +159,7 @@ body {
 }
 .unit-price input::-webkit-outer-spin-button,
 .unit-price input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.unit-price span { color: var(--ink-soft); font-size: .85rem; white-space: nowrap; }
+.unit-price span { color: var(--ink-soft); font-size: .9rem; }
 
 .price {
   display: flex;
@@ -224,10 +230,9 @@ body {
   transition: transform .12s ease, opacity .15s ease;
 }
 .btn:active { transform: translateY(1px); }
-.btn-apple { background: #000; color: #fff; }
-.btn-apple:hover { opacity: .87; }
-.btn-apple b { font-weight: 700; }
-.apple { width: 19px; height: 19px; }
+.btn-stripe { background: #635bff; color: #fff; }
+.btn-stripe:hover { background: #524adb; }
+.btn-stripe b { font-weight: 700; }
 .btn-card { background: var(--accent); color: #fff; }
 .btn-card:hover { opacity: .9; }
 
@@ -270,7 +275,7 @@ button:focus-visible, input:focus-visible {
   font-weight: 700;
   font-size: 1.15rem;
 }
-.sheet-brand .apple { width: 17px; height: 17px; }
+.sheet-brand { color: #635bff; }
 .sheet-line[hidden] { display: none; }
 .sheet-line, .sheet-total {
   display: flex;
@@ -454,17 +459,17 @@ button:focus-visible, input:focus-visible {
 }
 
 /* ============ Écrans bas (téléphone en paysage) ============ */
-@media (max-height: 620px) {
-  .screen { padding: 8px 16px; }
-  .panel { gap: 4px; }
-  .head h1 { font-size: 1.7rem; }
-  .by { margin-top: 2px; font-size: .68rem; letter-spacing: .14em; }
-  .earring { height: clamp(64px, 16vh, 110px); }
-  .product { font-size: .88rem; }
+@media (max-height: 680px) {
+  .screen { padding: 6px 16px; }
+  .panel { gap: 3px; }
+  .head h1 { font-size: 1.5rem; }
+  .by { margin-top: 1px; font-size: .64rem; letter-spacing: .12em; }
+  .earring { height: clamp(50px, 13vh, 100px); }
+  .product { font-size: .85rem; }
   .product span { display: none; }
-  .buy { padding: 5px 6px; border-radius: 11px; }
-  .qty button { width: 30px; height: 30px; }
-  .price { font-size: 1.25rem; }
+  .buy-row { padding: 4px 10px; }
+  .qty button { width: 26px; height: 26px; }
+  .price { font-size: 1.1rem; margin: 0; }
   .promo input { padding: 6px 12px; font-size: .85rem; }
   .promo-msg { font-size: .72rem; }
   .pay-buttons { gap: 6px; }

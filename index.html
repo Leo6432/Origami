@@ -66,15 +66,21 @@
     <p class="product">Boucles d'oreilles grue<span>vous choisissez le prix</span></p>
 
     <div class="buy">
-      <div class="qty">
-        <button type="button" id="minus" aria-label="Retirer une paire">−</button>
-        <span id="qtyValue">1</span>
-        <button type="button" id="plus" aria-label="Ajouter une paire">+</button>
+      <div class="buy-row">
+        <span class="buy-label">Quantité</span>
+        <div class="qty">
+          <button type="button" id="minus" aria-label="Retirer une paire">−</button>
+          <span id="qtyValue">1</span>
+          <button type="button" id="plus" aria-label="Ajouter une paire">+</button>
+        </div>
       </div>
-      <label class="unit-price">
-        <input type="number" id="unitPrice" value="5" min="1" max="50" step="0.5" inputmode="decimal" aria-label="Prix par paire, en euros">
-        <span>€ / paire</span>
-      </label>
+      <div class="buy-row">
+        <span class="buy-label">Prix par paire</span>
+        <label class="unit-price">
+          <input type="number" id="unitPrice" value="5" min="1" max="50" step="0.5" inputmode="decimal" aria-label="Prix par paire, en euros">
+          <span>€</span>
+        </label>
+      </div>
     </div>
 
     <p class="price"><del id="priceOld" hidden></del><span id="price">5 €</span><span class="price-label">au total</span></p>
@@ -85,13 +91,9 @@
     </div>
 
     <div class="pay-buttons">
-      <button type="button" class="btn btn-apple" id="payApple">
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="apple">
-          <path fill="currentColor" d="M16.2 12.6c0-2.2 1.8-3.3 1.9-3.3-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.4 0-2.8.8-3.5 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.6.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.3-.9-2.3-3.3zM14 6.2c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1.1 1.7-.9 2.6 1 .1 2-.5 2.6-1.2z"/>
-        </svg>
-        Payer avec <b>Apple&nbsp;Pay</b>
+      <button type="button" class="btn btn-stripe" id="payStripe">
+        Payer avec <b>Stripe</b>
       </button>
-      <button type="button" class="btn btn-card" id="payCard">Carte bancaire</button>
       <button type="button" class="btn btn-transfer" id="payTransfer" hidden>Virement bancaire</button>
       <button type="button" class="link" id="payCash">ou régler en espèces à l'accueil</button>
     </div>
@@ -100,12 +102,12 @@
   <!-- ===== Écran 2 : la feuille de paiement ===== -->
   <section class="panel" id="panelSheet" hidden>
     <div class="sheet">
-      <p class="sheet-brand" id="sheetBrand">Apple Pay</p>
+      <p class="sheet-brand" id="sheetBrand">Stripe</p>
       <p class="sheet-line"><span>Origami — boucles grue</span><b id="sheetQty">1 paire</b></p>
       <p class="sheet-line sheet-promo" id="sheetPromo" hidden><span id="sheetPromoCode">Code</span><b id="sheetPromoValue">−0 €</b></p>
       <p class="sheet-total"><span>À payer</span><b id="sheetTotal">5 €</b></p>
       <p class="sheet-demo" id="sheetDemo">Démonstration : aucun paiement n'est réellement encaissé.</p>
-      <button type="button" class="btn btn-apple" id="sheetPay">Payer</button>
+      <button type="button" class="btn btn-stripe" id="sheetPay">Payer</button>
       <button type="button" class="link" id="sheetBack">Annuler</button>
     </div>
   </section>
