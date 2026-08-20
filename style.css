@@ -150,25 +150,6 @@ body {
 .qty button:hover { border-color: var(--accent); color: var(--accent); }
 .qty span { min-width: 1.2em; text-align: center; font-weight: 600; }
 
-.unit-price { display: flex; align-items: center; gap: 6px; }
-.unit-price input {
-  width: 3.4em;
-  font: inherit;
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1;
-  text-align: right;
-  padding: 9px 4px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--ink);
-  -moz-appearance: textfield;
-}
-.unit-price input::-webkit-outer-spin-button,
-.unit-price input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.unit-price span { color: var(--ink-soft); font-size: .9rem; }
-
 .price {
   display: flex;
   align-items: baseline;

@@ -1,9 +1,7 @@
 (function () {
   "use strict";
 
-  var PRIX_SUGGERE = 5;  // euros la paire, valeur de départ dans le champ
-  var PRIX_MIN     = 1;  // euros — garde-fou local, doit rester ≤ au minimum Stripe
-  var PRIX_MAX     = 50; // euros — garde-fou local, purement pour éviter les fautes de frappe
+  var PRIX_SUGGERE = 5;  // euros la paire, affiché comme montant suggéré
 
   /* ==========================================================
      PAIEMENT — à remplir par Colin. Voir le README, section
@@ -113,23 +111,18 @@
     p.style.animation = "";
   }
 
-  /* ============ Prix (libre, fixé par le client) ============ */
+  /* ============ Quantité (prix libre, fixé par le client sur Stripe) ============
+     PRIX_SUGGERE sert uniquement de repère affiché sur cette page
+     (montant "suggéré") et de base pour l'espèces / le virement,
+     puisqu'il n'y a pas de page Stripe dans ces deux cas. */
   var qte = 1;
-  var unitPriceInput = $("unitPrice");
 
   function euros(m) {
     return (Math.round(m * 100) / 100).toFixed(m % 1 === 0 ? 0 : 2).replace(".", ",") + " €";
   }
 
-  function prixUnitaire() {
-    var v = parseFloat(String(unitPriceInput.value).replace(",", "."));
-    if (isNaN(v) || v <= 0) v = PRIX_SUGGERE;
-    return v;
-  }
-
   function montants() {
-    var net = qte * prixUnitaire();
-    return { net: net };
+    return { net: qte * PRIX_SUGGERE };
   }
 
   function majPrix() {
@@ -143,15 +136,6 @@
   });
   $("plus").addEventListener("click", function () {
     if (qte < 20) { qte++; majPrix(); }
-  });
-
-  unitPriceInput.addEventListener("input", majPrix);
-  unitPriceInput.addEventListener("blur", function () {
-    var v = prixUnitaire();
-    if (v < PRIX_MIN) v = PRIX_MIN;
-    if (v > PRIX_MAX) v = PRIX_MAX;
-    unitPriceInput.value = v;
-    majPrix();
   });
 
   majPrix();
@@ -276,7 +260,6 @@
   /* ============ Recommencer ============ */
   $("restart").addEventListener("click", function () {
     qte = 1;
-    unitPriceInput.value = PRIX_SUGGERE;
     majPrix();
     montrer("shop");
   });
