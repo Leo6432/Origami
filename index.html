@@ -9,9 +9,50 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕊️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪩</text></svg>">
 </head>
 <body>
+
+<!-- ================= INTRO DISCO ================= -->
+<div class="intro" id="intro">
+  <div class="beams" aria-hidden="true"></div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+  <div class="intro-stage">
+    <span class="disco-cord" aria-hidden="true"></span>
+    <div class="disco" aria-hidden="true"><span class="facets"></span><span class="gloss"></span></div>
+    <p class="intro-title">Grues d'Origami</p>
+    <p class="intro-sub">Que la fête commence 🪩</p>
+  </div>
+  <button type="button" class="intro-skip" id="introSkip">Passer</button>
+</div>
+
+<!-- ================= GRUE (dessin réutilisé) ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="earring" viewBox="0 0 200 300">
+    <!-- crochet -->
+    <path d="M100 92 V46 a15 15 0 1 0 -30 0 V60"
+          fill="none" stroke="var(--copper)" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- chaînette : maillons qui descendent jusqu'au dos de la grue -->
+    <g fill="none" stroke="var(--copper)" stroke-width="3">
+      <ellipse cx="100" cy="99" rx="4" ry="7"/>
+      <ellipse cx="100" cy="112" rx="4" ry="7"/>
+      <ellipse cx="100" cy="125" rx="4" ry="7"/>
+      <ellipse cx="100" cy="138" rx="4" ry="7"/>
+      <ellipse cx="100" cy="151" rx="4" ry="7"/>
+    </g>
+    <!-- grue : la chaîne se raccroche au dos, en 100,161 -->
+    <g class="crane-body">
+      <path d="M100 166 L34 84 L62 162 Z" fill="var(--paper-light)"/>
+      <path d="M100 166 L166 84 L138 162 Z" fill="var(--paper-mid)"/>
+      <path d="M100 160 L64 164 L100 246 L136 164 Z" fill="var(--paper-shade)"/>
+      <path d="M106 172 L182 150 L176 163 L108 186 Z" fill="var(--paper-mid)"/>
+      <path d="M94 174 L20 136 L23 150 L98 188 Z" fill="var(--paper-shade)"/>
+      <path d="M20 136 L4 140 L26 152 Z" fill="var(--paper-deep)"/>
+    </g>
+    <!-- anneau de jonction, par-dessus, là où la chaîne entre dans le papier -->
+    <circle cx="100" cy="161" r="5.5" fill="none" stroke="var(--copper)" stroke-width="3"/>
+  </symbol>
+</svg>
 
 <header class="site-header">
   <a class="brand" href="#top">
@@ -46,36 +87,12 @@
     </div>
 
     <div class="hero-visual">
-      <div class="earring earring-a">
-        <span class="hook"></span>
-        <span class="chain"></span>
-        <!-- Grue origami en SVG -->
-        <svg class="crane" viewBox="0 0 200 200" aria-label="Grue en origami">
-          <g class="crane-body">
-            <path d="M100 104 L36 22 L60 100 Z" fill="var(--paper-light)"/>
-            <path d="M100 104 L164 22 L140 100 Z" fill="var(--paper-mid)"/>
-            <path d="M100 104 L60 100 L100 176 L140 100 Z" fill="var(--paper-shade)"/>
-            <path d="M104 112 L178 88 L172 102 L106 126 Z" fill="var(--paper-mid)"/>
-            <path d="M96 114 L18 70 L22 84 L98 128 Z" fill="var(--paper-shade)"/>
-            <path d="M18 70 L2 74 L24 86 Z" fill="var(--paper-deep)"/>
-          </g>
-        </svg>
-      </div>
-
-      <div class="earring earring-b">
-        <span class="hook"></span>
-        <span class="chain"></span>
-        <svg class="crane" viewBox="0 0 200 200" aria-hidden="true">
-          <g class="crane-body">
-            <path d="M100 104 L36 22 L60 100 Z" fill="var(--paper-light)"/>
-            <path d="M100 104 L164 22 L140 100 Z" fill="var(--paper-mid)"/>
-            <path d="M100 104 L60 100 L100 176 L140 100 Z" fill="var(--paper-shade)"/>
-            <path d="M104 112 L178 88 L172 102 L106 126 Z" fill="var(--paper-mid)"/>
-            <path d="M96 114 L18 70 L22 84 L98 128 Z" fill="var(--paper-shade)"/>
-            <path d="M18 70 L2 74 L24 86 Z" fill="var(--paper-deep)"/>
-          </g>
-        </svg>
-      </div>
+      <svg class="earring earring-a" viewBox="0 0 200 300" role="img" aria-label="Boucle d'oreille grue en origami">
+        <use href="#earring"/>
+      </svg>
+      <svg class="earring earring-b" viewBox="0 0 200 300" aria-hidden="true">
+        <use href="#earring"/>
+      </svg>
     </div>
   </section>
 
@@ -92,16 +109,9 @@
     <h2 class="section-title">La paire</h2>
     <div class="product">
       <div class="product-media">
-        <div class="swatch-stage" id="swatchStage">
-          <svg class="crane crane-big" viewBox="0 0 200 200" aria-label="Aperçu de la grue">
-            <g class="crane-body">
-              <path d="M100 104 L36 22 L60 100 Z" fill="var(--paper-light)"/>
-              <path d="M100 104 L164 22 L140 100 Z" fill="var(--paper-mid)"/>
-              <path d="M100 104 L60 100 L100 176 L140 100 Z" fill="var(--paper-shade)"/>
-              <path d="M104 112 L178 88 L172 102 L106 126 Z" fill="var(--paper-mid)"/>
-              <path d="M96 114 L18 70 L22 84 L98 128 Z" fill="var(--paper-shade)"/>
-              <path d="M18 70 L2 74 L24 86 Z" fill="var(--paper-deep)"/>
-            </g>
+        <div class="swatch-stage">
+          <svg class="earring earring-big" viewBox="0 0 200 300" role="img" aria-label="Aperçu de la boucle d'oreille">
+            <use href="#earring"/>
           </svg>
         </div>
       </div>
@@ -114,30 +124,10 @@
           à une petite chaîne cuivrée. Chaque pli est fait à la main : deux paires ne sont
           jamais parfaitement identiques.
         </p>
-
-        <p class="field-label">Couleur du papier</p>
-        <div class="colors" id="colors" role="radiogroup" aria-label="Couleur du papier">
-          <button type="button" class="color is-active" role="radio" aria-checked="true"
-                  data-name="Rouge cerise" data-light="#e8737a" data-mid="#d2545f" data-shade="#b53f4c" data-deep="#8f2f3c">
-            <span class="dot" style="background:#d2545f"></span>Rouge cerise
-          </button>
-          <button type="button" class="color" role="radio" aria-checked="false"
-                  data-name="Rose poudré" data-light="#f2a8b4" data-mid="#e58a9b" data-shade="#cf6f84" data-deep="#ad566b">
-            <span class="dot" style="background:#e58a9b"></span>Rose poudré
-          </button>
-          <button type="button" class="color" role="radio" aria-checked="false"
-                  data-name="Bleu indigo" data-light="#6f8fc4" data-mid="#5474ad" data-shade="#3f5b90" data-deep="#2d4470">
-            <span class="dot" style="background:#5474ad"></span>Bleu indigo
-          </button>
-          <button type="button" class="color" role="radio" aria-checked="false"
-                  data-name="Doré" data-light="#e2c073" data-mid="#cfa64f" data-shade="#b28b39" data-deep="#8d6c26">
-            <span class="dot" style="background:#cfa64f"></span>Doré
-          </button>
-          <button type="button" class="color" role="radio" aria-checked="false"
-                  data-name="Vert sauge" data-light="#8fb69a" data-mid="#729c7f" data-shade="#5b8168" data-deep="#436350">
-            <span class="dot" style="background:#729c7f"></span>Vert sauge
-          </button>
-        </div>
+        <p class="note">
+          Le papier se choisit sur place, dans ce qui est disponible le jour même.
+          Vous pouvez aussi glisser une envie de couleur dans la commande.
+        </p>
 
         <a class="btn btn-primary btn-wide" href="#commander">Commander cette paire — 5 €</a>
       </div>
@@ -186,14 +176,8 @@
 
         <div class="row">
           <label class="field">
-            <span>Couleur</span>
-            <select id="colorSelect" name="color">
-              <option>Rouge cerise</option>
-              <option>Rose poudré</option>
-              <option>Bleu indigo</option>
-              <option>Doré</option>
-              <option>Vert sauge</option>
-            </select>
+            <span>Une envie de couleur ? <small>(facultatif)</small></span>
+            <input type="text" id="wish" name="wish" placeholder="rouge, doré, bleu… ou surprise">
           </label>
           <label class="field">
             <span>Nombre de paires</span>
