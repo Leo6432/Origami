@@ -46,31 +46,54 @@ tout ce qu'il contient est public. Seuls un lien de paiement, une clé
 « publishable » (`pk_…`) et un IBAN que tu acceptes d'afficher ont leur
 place ici.
 
+### Le prix est libre — le client choisit ce qu'il paie
+
+Le site ne fixe plus 5 € : la personne tape elle-même un montant par paire
+(5 € suggéré au départ), choisit une quantité, et le total est calculé sur
+la page. Ça change la façon de configurer Stripe : il faut un produit en
+mode **« Le client choisit le prix »**, pas un prix fixe.
+
 ### Option 1 — Stripe Payment Link (recommandée, Apple Pay inclus)
 
-1. Crée un compte sur stripe.com (gratuit ; ~1,5 % + 0,25 € par paiement
-   pour une carte européenne). C'est **toi** qui saisis ton RIB chez
-   Stripe, pour recevoir les virements — il ne passe pas par le site.
-2. Produits → *Ajouter un produit* : « Boucles d'oreilles grue », 5 €.
-3. Onglet *Payment Links* → crée un lien pour ce produit, et coche
-   **« Les clients peuvent ajuster la quantité »**.
-4. Copie l'adresse obtenue (`https://buy.stripe.com/…`) dans :
+1. Crée un compte sur stripe.com, en type **« Entrepreneur individuel »**
+   (pas besoin de société). C'est **toi** qui saisis ton IBAN chez Stripe
+   pour recevoir les virements — il ne passe jamais par le site.
+   Frais : ~1,5 % + 0,25 € par paiement carte européenne.
+2. Reste en mode **Test** pour essayer d'abord (bascule en haut du
+   tableau de bord) ; tu repasseras en **Production** une fois que tout
+   fonctionne.
+3. Produits → *Ajouter un produit* : « Boucles d'oreilles grue ».
+4. Sur le prix, choisis **« Le client choisit le prix »** (parfois affiché
+   *Customer chooses price* / *pay what you want*), avec un prix suggéré
+   à 5 € et, si l'option existe, un **minimum** (1 € par exemple, pour
+   éviter les montants à 0).
+5. Onglet *Payment Links* → crée un lien pour ce produit.
+6. Copie l'adresse obtenue (`https://buy.stripe.com/…`, ou
+   `.../test_…` en mode Test) dans :
 
    ```js
    var PAIEMENT = {
      lien: "https://buy.stripe.com/ton_lien",
-     parametreQuantite: "quantity",
+     parametreMontant: "prefilled_price",
    ```
 
-Les boutons Apple Pay et Carte envoient alors le client sur la page
-sécurisée de Stripe, avec la bonne quantité. Apple Pay et Google Pay y
-apparaissent tout seuls sur les appareils compatibles — rien à configurer,
-tant que le site est servi en HTTPS.
+Le site calcule lui-même le total (prix par paire × quantité, remise
+éventuelle déduite) et l'envoie pré-rempli sur la page Stripe via ce
+paramètre. **À vérifier avant de passer en Production** : ouvre ton lien
+de test en ajoutant `?prefilled_price=1000` à la fin de l'adresse dans un
+navigateur, et confirme que **10,00 €** apparaît bien pré-rempli sur la
+page. Si ce n'est pas le cas (Stripe fait parfois évoluer cette fonction),
+laisse `parametreMontant: ""` : le client tapera son montant lui-même sur
+la page Stripe, ce qui reste tout à fait utilisable.
+
+Apple Pay et Google Pay apparaissent tout seuls sur les appareils
+compatibles — rien à configurer, tant que le site est servi en HTTPS.
 
 ### Option 2 — un lien que tu as déjà
 
-Même champ `lien` : PayPal.me, SumUp, Lydia, Revolut.me… Dans ce cas mets
-`parametreQuantite: ""`, ces liens ne gèrent pas la quantité dans l'adresse.
+Même champ `lien` : SumUp, Lydia, Revolut.me… Regarde si le service
+propose un paramètre d'URL pour pré-remplir un montant ; sinon mets
+`parametreMontant: ""`.
 
 ### Option 3 — virement bancaire
 

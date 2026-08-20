@@ -130,10 +130,37 @@ body {
 }
 .qty button:hover { border-color: var(--accent); color: var(--accent); }
 .qty span { min-width: 1.2em; font-weight: 600; }
-.qty em { font-style: normal; color: var(--ink-soft); font-size: .9rem; }
+
+.unit-price {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+.unit-price input {
+  width: 3.2em;
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: right;
+  padding: 6px 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+  -moz-appearance: textfield;
+}
+.unit-price input::-webkit-outer-spin-button,
+.unit-price input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.unit-price span { color: var(--ink-soft); font-size: .85rem; white-space: nowrap; }
 
 .price {
-  margin: 0 6px 0 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
   font-family: "Fraunces", Georgia, serif;
   font-size: 1.5rem;
   font-weight: 700;
@@ -143,7 +170,12 @@ body {
   font-size: .85rem;
   font-weight: 400;
   color: var(--ink-soft);
-  margin-right: 8px;
+}
+.price-label {
+  font-family: "Inter", sans-serif;
+  font-size: .78rem;
+  font-weight: 400;
+  color: var(--ink-soft);
 }
 
 /* ============ Code promo ============ */

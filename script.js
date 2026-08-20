@@ -1,28 +1,39 @@
 (function () {
   "use strict";
 
-  var PRIX_UNITAIRE = 5; // euros la paire
+  var PRIX_SUGGERE = 5;  // euros la paire, valeur de départ dans le champ
+  var PRIX_MIN     = 1;  // euros — garde-fou local, doit rester ≤ au minimum Stripe
+  var PRIX_MAX     = 50; // euros — garde-fou local, purement pour éviter les fautes de frappe
 
   /* ==========================================================
      PAIEMENT — à remplir par Colin. Voir le README, section
-     « Encaisser pour de vrai ». Tant que tout est vide, le site
-     reste en démonstration (aucun argent n'est encaissé).
+     « Encaisser pour de vrai ». Tant que le lien est vide, le
+     site reste en démonstration (aucun argent n'est encaissé).
      N'écrivez ici QUE des informations publiques : un lien de
      paiement, une clé « publishable » (pk_live_…), un IBAN que
      vous acceptez d'afficher. JAMAIS une clé secrète (sk_…).
      ========================================================== */
   var PAIEMENT = {
 
-    /* 1. Lien de paiement (Stripe Payment Link, SumUp, PayPal.me,
-          Lydia, Revolut…). Dès qu'il est rempli, les boutons
+    /* 1. Lien de paiement, créé côté Stripe avec l'option
+          « Le client choisit le prix » (customer chooses price)
+          sur le produit — puisqu'ici chaque client fixe son
+          propre montant. Dès qu'il est rempli, les boutons
           Apple Pay / carte envoient le client dessus.
           Exemple : "https://buy.stripe.com/xxxxxxxx"            */
     lien: "",
 
-    /* 2. Le lien accepte-t-il une quantité dans l'adresse ?
-          Stripe Payment Link : laissez "quantity" (activez
-          « quantité modifiable » côté Stripe). Sinon : ""       */
-    parametreQuantite: "quantity",
+    /* 2. Nom du paramètre d'URL utilisé pour pré-remplir le
+          montant sur la page Stripe. Le prix par paire × la
+          quantité (remise éventuelle déduite) est calculé ici,
+          converti en centimes, et transmis via ce paramètre —
+          Stripe l'appelle "prefilled_price". À VÉRIFIER en mode
+          Test avant de passer en Production : ouvrez le lien
+          test avec `?prefilled_price=1000` et confirmez que
+          10,00 € apparaît bien pré-rempli. Si votre prestataire
+          n'a pas cette option, mettez "" : le client tapera son
+          montant lui-même sur la page de paiement.              */
+    parametreMontant: "prefilled_price",
 
     /* 3. Virement bancaire (facultatif). Renseigné = un bouton
           « Virement » apparaît et affiche ces informations.
@@ -108,16 +119,23 @@
     p.style.animation = "";
   }
 
-  /* ============ Prix ============ */
+  /* ============ Prix (libre, fixé par le client) ============ */
   var qte = 1;
   var promoActif = null;
+  var unitPriceInput = $("unitPrice");
 
   function euros(m) {
     return (Math.round(m * 100) / 100).toFixed(m % 1 === 0 ? 0 : 2).replace(".", ",") + " €";
   }
 
+  function prixUnitaire() {
+    var v = parseFloat(String(unitPriceInput.value).replace(",", "."));
+    if (isNaN(v) || v <= 0) v = PRIX_SUGGERE;
+    return v;
+  }
+
   function montants() {
-    var brut = qte * PRIX_UNITAIRE;
+    var brut = qte * prixUnitaire();
     var remise = promoActif ? brut * promoActif.remise : 0;
     return { brut: brut, remise: remise, net: brut - remise };
   }
@@ -135,6 +153,15 @@
   });
   $("plus").addEventListener("click", function () {
     if (qte < 20) { qte++; majPrix(); }
+  });
+
+  unitPriceInput.addEventListener("input", majPrix);
+  unitPriceInput.addEventListener("blur", function () {
+    var v = prixUnitaire();
+    if (v < PRIX_MIN) v = PRIX_MIN;
+    if (v > PRIX_MAX) v = PRIX_MAX;
+    unitPriceInput.value = v;
+    majPrix();
   });
 
   /* ============ Code promo ============ */
@@ -198,12 +225,14 @@
     montrer("sheet");
   }
 
-  /* Envoie le client vers le vrai prestataire de paiement. */
+  /* Envoie le client vers le vrai prestataire de paiement, avec le
+     montant total (prix libre × quantité, remise déduite). */
   function allerAuPaiement() {
     var url = PAIEMENT.lien.trim();
-    if (PAIEMENT.parametreQuantite && qte > 1) {
+    if (PAIEMENT.parametreMontant) {
+      var centimes = Math.round(montants().net * 100);
       url += (url.indexOf("?") === -1 ? "?" : "&") +
-             encodeURIComponent(PAIEMENT.parametreQuantite) + "=" + qte;
+             encodeURIComponent(PAIEMENT.parametreMontant) + "=" + centimes;
     }
     window.location.href = url;
   }
@@ -283,6 +312,7 @@
   /* ============ Recommencer ============ */
   $("restart").addEventListener("click", function () {
     qte = 1;
+    unitPriceInput.value = PRIX_SUGGERE;
     promoActif = null;
     promoInput.value = "";
     promoMsg.textContent = "";
