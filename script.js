@@ -21,7 +21,7 @@
           propre montant. Dès qu'il est rempli, les boutons
           Apple Pay / carte envoient le client dessus.
           Exemple : "https://buy.stripe.com/xxxxxxxx"            */
-    lien: "",
+    lien: "https://buy.stripe.com/test_00w8wP2vD7BD84XeTWds400",
 
     /* 2. Nom du paramètre d'URL utilisé pour pré-remplir le
           montant sur la page Stripe. Le prix par paire × la
