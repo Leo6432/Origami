@@ -3,75 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Origami — fait main par Colin</title>
-<meta name="description" content="Boucles d'oreilles grue en origami, faites main par Colin. 5 € la paire.">
+<title>Coupe de cheveux — par Philémon</title>
+<meta name="description" content="Coupe de cheveux par Philémon, environ 20 minutes. Prix libre, vous choisissez sur la page de paiement.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✂️</text></svg>">
 </head>
 <body>
-
-<!-- ===== Arrivée : boule disco ===== -->
-<div class="intro" id="intro">
-  <div class="beams" aria-hidden="true"></div>
-  <div class="confetti" id="confetti" aria-hidden="true"></div>
-  <div class="intro-stage">
-    <span class="disco-cord" aria-hidden="true"></span>
-    <div class="disco" aria-hidden="true"><span class="facets"></span><span class="gloss"></span></div>
-    <p class="intro-title">Origami</p>
-    <p class="intro-sub">Fait main par Colin</p>
-  </div>
-</div>
-
-<!-- ===== Le dessin de la boucle, réutilisé ===== -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="earring" viewBox="0 0 200 300">
-    <path d="M100 92 V46 a15 15 0 1 0 -30 0 V60"
-          fill="none" stroke="var(--copper)" stroke-width="4.5" stroke-linecap="round"/>
-    <g fill="none" stroke="var(--copper)" stroke-width="3">
-      <ellipse cx="100" cy="99"  rx="4" ry="7"/>
-      <ellipse cx="100" cy="112" rx="4" ry="7"/>
-      <ellipse cx="100" cy="125" rx="4" ry="7"/>
-      <ellipse cx="100" cy="138" rx="4" ry="7"/>
-      <ellipse cx="100" cy="151" rx="4" ry="7"/>
-    </g>
-    <g>
-      <path d="M100 166 L34 84 L62 162 Z"          fill="var(--paper-light)"/>
-      <path d="M100 166 L166 84 L138 162 Z"        fill="var(--paper-mid)"/>
-      <path d="M100 160 L64 164 L100 246 L136 164 Z" fill="var(--paper-shade)"/>
-      <path d="M106 172 L182 150 L176 163 L108 186 Z" fill="var(--paper-mid)"/>
-      <path d="M94 174 L20 136 L23 150 L98 188 Z"  fill="var(--paper-shade)"/>
-      <path d="M20 136 L4 140 L26 152 Z"           fill="var(--paper-deep)"/>
-    </g>
-    <circle cx="100" cy="161" r="5.5" fill="none" stroke="var(--copper)" stroke-width="3"/>
-  </symbol>
-</svg>
 
 <main class="screen">
 
   <!-- ===== Écran 1 : la boutique ===== -->
   <section class="panel" id="panelShop">
     <header class="head">
-      <h1>Origami</h1>
-      <p class="by">Fait main par Colin</p>
+      <h1>Philémon</h1>
+      <p class="by">Coupe de cheveux</p>
     </header>
 
-    <div class="pair" aria-hidden="true">
-      <svg class="earring a" viewBox="0 0 200 300"><use href="#earring"/></svg>
-      <svg class="earring b" viewBox="0 0 200 300"><use href="#earring"/></svg>
+    <div class="icon" aria-hidden="true">
+      <svg viewBox="0 0 100 100">
+        <circle cx="30" cy="26" r="10" fill="none" stroke="var(--copper)" stroke-width="5"/>
+        <circle cx="30" cy="74" r="10" fill="none" stroke="var(--copper)" stroke-width="5"/>
+        <path d="M38 33 L82 68" fill="none" stroke="var(--copper)" stroke-width="5" stroke-linecap="round"/>
+        <path d="M38 67 L82 32" fill="none" stroke="var(--copper)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="82" cy="50" r="4" fill="var(--copper)"/>
+      </svg>
     </div>
 
-    <p class="product">Boucles d'oreilles grue<span>vous choisissez le prix</span></p>
+    <p class="product">Coupe de cheveux<span>environ 20 min · vous choisissez le prix</span></p>
 
     <div class="buy">
       <div class="buy-row">
-        <span class="buy-label">Quantité</span>
+        <span class="buy-label">Nombre de coupes</span>
         <div class="qty">
-          <button type="button" id="minus" aria-label="Retirer une paire">−</button>
+          <button type="button" id="minus" aria-label="Retirer une coupe">−</button>
           <span id="qtyValue">1</span>
-          <button type="button" id="plus" aria-label="Ajouter une paire">+</button>
+          <button type="button" id="plus" aria-label="Ajouter une coupe">+</button>
         </div>
       </div>
     </div>
@@ -92,7 +61,7 @@
   <section class="panel" id="panelSheet" hidden>
     <div class="sheet">
       <p class="sheet-brand" id="sheetBrand">Stripe</p>
-      <p class="sheet-line"><span>Origami — boucles grue</span><b id="sheetQty">1 paire</b></p>
+      <p class="sheet-line"><span>Coupe de cheveux — Philémon</span><b id="sheetQty">1 coupe</b></p>
       <p class="sheet-total"><span>À payer</span><b id="sheetTotal">5 €</b></p>
       <p class="sheet-demo" id="sheetDemo">Démonstration : aucun paiement n'est réellement encaissé.</p>
       <button type="button" class="btn btn-stripe" id="sheetPay">Payer</button>

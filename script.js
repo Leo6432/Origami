@@ -1,10 +1,10 @@
 (function () {
   "use strict";
 
-  var PRIX_SUGGERE = 5;  // euros la paire, affiché comme montant suggéré
+  var PRIX_SUGGERE = 5;  // euros la coupe, affiché comme montant suggéré
 
   /* ==========================================================
-     PAIEMENT — à remplir par Colin. Voir le README, section
+     PAIEMENT — à remplir par Philémon. Voir le README, section
      « Encaisser pour de vrai ». Tant que le lien est vide, le
      site reste en démonstration (aucun argent n'est encaissé).
      N'écrivez ici QUE des informations publiques : un lien de
@@ -16,8 +16,8 @@
     /* 1. Lien de paiement, créé côté Stripe avec l'option
           « Le client choisit le prix » (customer chooses price)
           sur le produit — puisqu'ici chaque client fixe son
-          propre montant. Dès qu'il est rempli, les boutons
-          Apple Pay / carte envoient le client dessus.
+          propre montant. Dès qu'il est rempli, le bouton Stripe
+          envoie le client dessus.
           Exemple : "https://buy.stripe.com/xxxxxxxx"            */
     lien: "https://buy.stripe.com/test_00w8wP2vD7BD84XeTWds400",
 
@@ -43,55 +43,10 @@
     }
   };
 
-  var LIEN_ACTIF    = /^https:\/\//.test(PAIEMENT.lien.trim());
+  var LIEN_ACTIF     = /^https:\/\//.test(PAIEMENT.lien.trim());
   var VIREMENT_ACTIF = PAIEMENT.virement.iban.trim() !== "";
 
-  var motionReduite = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var COULEURS_FETE = ["#ff5f7e", "#ffd166", "#5ec8ff", "#b98cff", "#6ee7a8", "#ff8f5e"];
-
   var $ = function (id) { return document.getElementById(id); };
-
-  /* ============ Confettis ============ */
-  function lacherConfettis(hote, nombre, duree) {
-    if (motionReduite || !hote) return;
-    for (var i = 0; i < nombre; i++) {
-      var c = document.createElement("span");
-      c.style.left = Math.random() * 100 + "%";
-      c.style.background = COULEURS_FETE[i % COULEURS_FETE.length];
-      c.style.animationDuration = (duree + Math.random() * 1.2).toFixed(2) + "s";
-      c.style.animationDelay = (Math.random() * 1).toFixed(2) + "s";
-      c.style.width = (6 + Math.random() * 7).toFixed(0) + "px";
-      c.style.height = (10 + Math.random() * 10).toFixed(0) + "px";
-      if (Math.random() > 0.6) c.style.borderRadius = "50%";
-      hote.appendChild(c);
-    }
-  }
-
-  function fete() {
-    if (motionReduite) return;
-    var pluie = document.createElement("div");
-    pluie.className = "confetti confetti-page";
-    document.body.appendChild(pluie);
-    lacherConfettis(pluie, 55, 2.4);
-    window.setTimeout(function () { pluie.remove(); }, 5000);
-  }
-
-  /* ============ Arrivée ============ */
-  var intro = $("intro");
-  if (intro) {
-    var partie = false;
-    var fermerIntro = function () {
-      if (partie) return;
-      partie = true;
-      intro.classList.add("is-gone");
-      window.setTimeout(function () { intro.remove(); }, 700);
-      window.removeEventListener("keydown", fermerIntro);
-    };
-    lacherConfettis($("confetti"), 34, 2.4);
-    intro.addEventListener("click", fermerIntro);
-    window.addEventListener("keydown", fermerIntro);
-    window.setTimeout(fermerIntro, motionReduite ? 500 : 2800);
-  }
 
   /* ============ Panneaux (un seul visible à la fois) ============ */
   var panneaux = {
@@ -105,10 +60,6 @@
     Object.keys(panneaux).forEach(function (cle) {
       panneaux[cle].hidden = (cle !== nom);
     });
-    var p = panneaux[nom];      // relance l'animation d'apparition
-    p.style.animation = "none";
-    void p.offsetWidth;
-    p.style.animation = "";
   }
 
   /* ============ Quantité (prix libre, fixé par le client sur Stripe) ============
@@ -141,7 +92,6 @@
   majPrix();
 
   /* ============ Paiement ============ */
-  /* Message affiché au-dessus du bouton, selon le cas. */
 
   function reference() {
     var d = new Date();
@@ -151,7 +101,7 @@
 
   function ouvrirFeuille() {
     var m = montants();
-    $("sheetQty").textContent = qte + (qte > 1 ? " paires" : " paire");
+    $("sheetQty").textContent = qte + (qte > 1 ? " coupes" : " coupe");
     $("sheetTotal").textContent = euros(m.net);
     if (LIEN_ACTIF) {
       $("sheetDemo").hidden = false;
@@ -168,7 +118,7 @@
   }
 
   /* Envoie le client vers le vrai prestataire de paiement, avec le
-     montant total (prix libre × quantité, remise déduite). */
+     montant total (prix libre × quantité) s'il peut être transmis. */
   function allerAuPaiement() {
     var url = PAIEMENT.lien.trim();
     if (PAIEMENT.parametreMontant) {
@@ -208,10 +158,9 @@
       $("doneTitle").textContent = "Merci !";
       $("doneMsg").innerHTML =
         "Paiement de <b>" + euros(m.net) + "</b> par Stripe — <b>simulé</b>, " +
-        "rien n'a été débité. Vos boucles vous attendent auprès de Colin.";
+        "rien n'a été débité. Rendez-vous chez Philémon pour la coupe.";
       $("doneRef").textContent = reference();
       montrer("done");
-      fete();
     }, 1100);
   });
 
@@ -252,7 +201,7 @@
     $("doneTitle").textContent = "Rendez-vous à l'accueil";
     $("doneMsg").innerHTML =
       "Présentez ce numéro et réglez <b>" + euros(m.net) + "</b> en espèces. " +
-      "Vos boucles vous seront remises sur place.";
+      "Philémon vous appellera pour la coupe.";
     $("doneRef").textContent = reference();
     montrer("done");
   });
