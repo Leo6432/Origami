@@ -87,49 +87,13 @@ body {
   color: var(--ink-soft);
 }
 
-/* ============ Quantité + prix ============ */
-.buy {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #fff;
-  overflow: hidden;
-}
-.buy-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 9px 14px;
-}
-.buy-row + .buy-row { border-top: 1px solid var(--line); }
-.buy-label {
-  font-size: 1.08rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
+/* ============ Prix ============ */
 .buy-note {
   margin: 4px 0 0;
   font-size: .8rem;
   color: var(--ink-soft);
   text-align: center;
 }
-
-.qty { display: flex; align-items: center; gap: 10px; }
-.qty button {
-  width: 32px; height: 32px;
-  border-radius: 9px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  font: inherit;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-.qty button:hover { border-color: var(--accent); color: var(--accent); }
-.qty span { min-width: 1.2em; text-align: center; font-weight: 600; }
 
 .price {
   display: flex;
@@ -284,8 +248,6 @@ button:focus-visible, input:focus-visible {
   .icon svg { width: clamp(56px, 13vh, 110px); }
   .product { font-size: .92rem; }
   .product span { display: none; }
-  .buy-row { padding: 5px 12px; }
-  .qty button { width: 28px; height: 28px; }
   .price { font-size: 1.25rem; margin: 0; }
   .pay-buttons { gap: 8px; }
   .btn { padding: 11px 18px; font-size: .96rem; border-radius: 12px; }
@@ -301,8 +263,6 @@ button:focus-visible, input:focus-visible {
   .head h1 { font-size: 1.4rem; }
   .by { margin-top: 1px; font-size: .62rem; }
   .icon svg { width: clamp(44px, 10vh, 80px); }
-  .buy-row { padding: 3px 10px; }
-  .qty button { width: 24px; height: 24px; }
   .price { font-size: 1.05rem; }
   .btn { padding: 8px 16px; font-size: .88rem; }
   .link { font-size: .78rem; }

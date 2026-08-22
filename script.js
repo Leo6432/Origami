@@ -62,34 +62,19 @@
     });
   }
 
-  /* ============ Quantité (prix libre, fixé par le client sur Stripe) ============
+  /* ============ Prix (libre, fixé par le client sur Stripe) ============
      PRIX_SUGGERE sert uniquement de repère affiché sur cette page
      (montant "suggéré") et de base pour l'espèces / le virement,
      puisqu'il n'y a pas de page Stripe dans ces deux cas. */
-  var qte = 1;
-
   function euros(m) {
     return (Math.round(m * 100) / 100).toFixed(m % 1 === 0 ? 0 : 2).replace(".", ",") + " €";
   }
 
   function montants() {
-    return { net: qte * PRIX_SUGGERE };
+    return { net: PRIX_SUGGERE };
   }
 
-  function majPrix() {
-    var m = montants();
-    $("qtyValue").textContent = qte;
-    $("price").textContent = euros(m.net);
-  }
-
-  $("minus").addEventListener("click", function () {
-    if (qte > 1) { qte--; majPrix(); }
-  });
-  $("plus").addEventListener("click", function () {
-    if (qte < 20) { qte++; majPrix(); }
-  });
-
-  majPrix();
+  $("price").textContent = euros(montants().net);
 
   /* ============ Paiement ============ */
 
@@ -101,7 +86,6 @@
 
   function ouvrirFeuille() {
     var m = montants();
-    $("sheetQty").textContent = qte + (qte > 1 ? " coupes" : " coupe");
     $("sheetTotal").textContent = euros(m.net);
     if (LIEN_ACTIF) {
       $("sheetDemo").hidden = false;
@@ -118,7 +102,7 @@
   }
 
   /* Envoie le client vers le vrai prestataire de paiement, avec le
-     montant total (prix libre × quantité) s'il peut être transmis. */
+     montant s'il peut être transmis. */
   function allerAuPaiement() {
     var url = PAIEMENT.lien.trim();
     if (PAIEMENT.parametreMontant) {
@@ -208,8 +192,6 @@
 
   /* ============ Recommencer ============ */
   $("restart").addEventListener("click", function () {
-    qte = 1;
-    majPrix();
     montrer("shop");
   });
 })();

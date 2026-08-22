@@ -34,16 +34,6 @@
 
     <p class="product">Coupe de cheveux<span>environ 20 min · vous choisissez le prix</span></p>
 
-    <div class="buy">
-      <div class="buy-row">
-        <span class="buy-label">Nombre de coupes</span>
-        <div class="qty">
-          <button type="button" id="minus" aria-label="Retirer une coupe">−</button>
-          <span id="qtyValue">1</span>
-          <button type="button" id="plus" aria-label="Ajouter une coupe">+</button>
-        </div>
-      </div>
-    </div>
     <p class="buy-note">Nous avons choisi de laisser le prix libre : vous le remplirez sur la page Stripe.</p>
 
     <p class="price"><span id="price">5 €</span><span class="price-label">suggéré au total</span></p>
@@ -61,7 +51,7 @@
   <section class="panel" id="panelSheet" hidden>
     <div class="sheet">
       <p class="sheet-brand" id="sheetBrand">Stripe</p>
-      <p class="sheet-line"><span>Coupe de cheveux — Philémon</span><b id="sheetQty">1 coupe</b></p>
+      <p class="sheet-line"><span>Coupe de cheveux — Philémon</span></p>
       <p class="sheet-total"><span>À payer</span><b id="sheetTotal">5 €</b></p>
       <p class="sheet-demo" id="sheetDemo">Démonstration : aucun paiement n'est réellement encaissé.</p>
       <button type="button" class="btn btn-stripe" id="sheetPay">Payer</button>
